@@ -5,6 +5,14 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/melrosesolutions/cal-date-fns"
+  },
+  "homepage": "https://github.com/melrosesolutions/cal-date-fns#readme",
+  "bugs": {
+    "url": "https://github.com/melrosesolutions/cal-date-fns/issues"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

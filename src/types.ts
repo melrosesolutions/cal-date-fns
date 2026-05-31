@@ -26,5 +26,5 @@ export type CalDate = `${YYYY}-${MM}-${DD}`;
 export type YearMonth = `${YYYY}-${MM}`;
 
 // object equivalent types
-export type CalDateObj = { y: number, m: number, d: number };
-export type YearMonthObj = { y: number, m: number };
+export interface CalDateObj { y: number, m: number, d: number };
+export interface YearMonthObj { y: number, m: number };

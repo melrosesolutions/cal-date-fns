@@ -9,11 +9,11 @@ Inspired by [date-fns](https://date-fns.org), but purpose-built for **ISO 8601 c
 JavaScript's `Date` object is a point in time, not a calendar date. This causes well-known pain: time zone shifts, DST bugs, and off-by-one errors when all you wanted was "the last day of March". `cal-date-fns` sidesteps all of that by working directly with ISO date strings.
 
 ```ts
-import { addMonths, endOfMonth, isWeekend } from "cal-date-fns";
+import { addMonths, endOfMonth, isWeekend } from 'cal-date-fns';
 
-addMonths("2025-01-31", 1)   // => "2025-02-28"
-endOfMonth("2025-02")        // => "2025-02-28"
-isWeekend("2025-03-15")      // => true
+addMonths('2025-01-31', 1); // => "2025-02-28"
+endOfMonth('2025-02'); // => "2025-02-28"
+isWeekend('2025-03-15'); // => true
 ```
 
 ## Installation
@@ -30,12 +30,12 @@ Most functions accept either a string or an object:
 
 ```ts
 // String forms
-type CalDate   = string  // "YYYY-MM-DD"
-type YearMonth = string  // "YYYY-MM"
+type CalDate = string; // "YYYY-MM-DD"
+type YearMonth = string; // "YYYY-MM"
 
 // Object forms
-type CalDateObj  = { y: number; m: number; d: number }
-type YearMonthObj = { y: number; m: number }
+type CalDateObj = { y: number; m: number; d: number };
+type YearMonthObj = { y: number; m: number };
 ```
 
 Functions that need a day component accept `CalDateInput = CalDate | CalDateObj`.
@@ -61,30 +61,30 @@ import {
   format,
   isAfter,
   eachMonth,
-} from "cal-date-fns";
+} from 'cal-date-fns';
 
 // Arithmetic
-addDays("2025-03-28", 5)          // => "2025-04-02"
-addMonths("2025-01-31", 1)        // => "2025-02-28"
-addMonths("2025-01", 3)           // => "2025-04"
+addDays('2025-03-28', 5); // => "2025-04-02"
+addMonths('2025-01-31', 1); // => "2025-02-28"
+addMonths('2025-01', 3); // => "2025-04"
 
 // Boundaries
-startOfMonth("2025-03-15")        // => "2025-03-01"
-startOfMonth("2025-03")           // => "2025-03-01"
-endOfMonth("2025-02")             // => "2025-02-28"
+startOfMonth('2025-03-15'); // => "2025-03-01"
+startOfMonth('2025-03'); // => "2025-03-01"
+endOfMonth('2025-02'); // => "2025-02-28"
 
 // Differences
-differenceInDays("2025-04-01", "2025-03-01")   // => 31
+differenceInDays('2025-04-01', '2025-03-01'); // => 31
 
 // Ranges
-eachMonth("2025-01", "2025-03")
+eachMonth('2025-01', '2025-03');
 // => ["2025-01", "2025-02", "2025-03"]
 
 // Comparison
-isAfter("2025-06-01", "2025-03-15")   // => true
+isAfter('2025-06-01', '2025-03-15'); // => true
 
 // Formatting
-format("2025-03-15", "DD MMM YYYY")   // => "15 Mar 2025"
+format('2025-03-15', 'DD MMM YYYY'); // => "15 Mar 2025"
 ```
 
 ## Object Input
@@ -92,8 +92,8 @@ format("2025-03-15", "DD MMM YYYY")   // => "15 Mar 2025"
 All functions also accept object forms:
 
 ```ts
-addDays({ y: 2025, m: 3, d: 28 }, 5)    // => "2025-04-02"
-endOfMonth({ y: 2025, m: 2 })           // => "2025-02-28"
+addDays({ y: 2025, m: 3, d: 28 }, 5); // => "2025-04-02"
+endOfMonth({ y: 2025, m: 2 }); // => "2025-02-28"
 ```
 
 ## Full API

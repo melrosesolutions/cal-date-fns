@@ -6,11 +6,7 @@
 - [Error Classes](#error-classes)
 - [Parsing & Validation](#parsing--validation)
 - [Formatting](#formatting)
-- [Arithmetic — Days](#arithmetic--days)
-- [Arithmetic — Weeks](#arithmetic--weeks)
-- [Arithmetic — Months](#arithmetic--months)
-- [Arithmetic — Quarters](#arithmetic--quarters)
-- [Arithmetic — Years](#arithmetic--years)
+- [Arithmetic](#arithmetic)
 - [Differences](#differences)
 - [Comparison](#comparison)
 - [Day-of-week](#day-of-week)
@@ -22,7 +18,7 @@
 - [Range Utilities](#range-utilities)
 - [Human-readable Distance](#human-readable-distance)
 - [Predicates](#predicates)
-- [TODO: Conversion Helpers](#todo-conversion-helpers)
+- [Conversion Helpers](#conversion-helpers)
 - [Intl API Helpers](#intl-api-helpers)
 - [Month Formatter](#createmonthformatterlocale-string-style-long--short--narrow-calmontformatter)
 - [Day Formatter](#createdayformatterlocale-string-style-long--short--narrow-caldayformatter)
@@ -43,6 +39,21 @@ type YearMonthObj = { y: number; m: number };
 // Input union types
 type CalDateInput = CalDate | CalDateObj;
 type AnyDateInput = CalDate | CalDateObj | YearMonth | YearMonthObj;
+
+// Duration — used by add(), subtract(), since(), until()
+interface Duration {
+  years?: number;
+  months?: number;
+  weeks?: number;
+  days?: number;
+}
+
+type DurationUnit = 'years' | 'months' | 'weeks' | 'days';
+
+interface DurationOptions {
+  largestUnit?: DurationUnit; // default: "days"
+  smallestUnit?: DurationUnit; // default: same as largestUnit, or "days"
+}
 ```
 
 **Month numbering is 1-based** throughout (January = 1), consistent with ISO 8601.
@@ -65,6 +76,10 @@ class CalDateParseError extends Error {}
 // Thrown when the extracted values form a structurally valid but impossible
 // date — e.g. month 13, or February 30th.
 class CalDateRangeError extends Error {}
+
+// Thrown when an options object contains an invalid combination —
+// e.g. smallestUnit larger than largestUnit, or a days duration passed to a YearMonth.
+class CalDateOptionsError extends Error {}
 ```
 
 ---
@@ -194,157 +209,81 @@ format('2025-03', 'MMM YYYY'); // => "Mar 2025"
 
 ---
 
-## Arithmetic — Days
+## Arithmetic
 
-_Accepts `CalDateInput` only._
+### `add(input: CalDateInput, duration: Duration): CalDate`
 
-### `addDays(input: CalDateInput, amount: number): CalDate`
+### `add(input: YearMonth | YearMonthObj, duration: Duration): YearMonth`
 
-```ts
-addDays('2025-03-28', 5); // => "2025-04-02"
-```
+Adds a duration to a date or month. Returns the same string type as the input.
 
-### `subDays(input: CalDateInput, amount: number): CalDate`
+All `Duration` fields are optional — include only the units you need. Month and year arithmetic clamps to the last day of the month when the original day does not exist in the target month.
 
 ```ts
-subDays('2025-04-02', 5); // => "2025-03-28"
+add('2025-01-15', { days: 10 }); // => "2025-01-25"
+add('2025-01-15', { months: 2, days: 5 }); // => "2025-03-20"
+add('2025-01-31', { months: 1 }); // => "2025-02-28"  (clamped)
+add('2024-02-29', { years: 1 }); // => "2025-02-28"  (clamped)
+add('2025-01', { months: 3 }); // => "2025-04"
+add('2025-01', { years: 1, months: 2 }); // => "2026-03"
 ```
+
+**Throws `CalDateOptionsError`** if a `days` or `weeks` duration is passed with a `YearMonth` input.
 
 ---
 
-## Arithmetic — Weeks
+### `subtract(input: CalDateInput, duration: Duration): CalDate`
 
-_Accepts `CalDateInput` only._
+### `subtract(input: YearMonth | YearMonthObj, duration: Duration): YearMonth`
 
-### `addWeeks(input: CalDateInput, amount: number): CalDate`
-
-```ts
-addWeeks('2025-03-01', 2); // => "2025-03-15"
-```
-
-### `subWeeks(input: CalDateInput, amount: number): CalDate`
+Subtracts a duration from a date or month. Follows the same rules as `add`.
 
 ```ts
-subWeeks('2025-03-15', 2); // => "2025-03-01"
+subtract('2025-03-20', { months: 2, days: 5 }); // => "2025-01-13"
+subtract('2025-03-31', { months: 1 }); // => "2025-02-28"  (clamped)
+subtract('2025-04', { months: 2 }); // => "2025-02"
 ```
 
----
-
-## Arithmetic — Months
-
-_Accepts `AnyDateInput`. Returns the same string type as the input._
-
-### `addMonths(input: CalDateInput, amount: number): CalDate`
-
-### `addMonths(input: YearMonth | YearMonthObj, amount: number): YearMonth`
-
-Clamps to the last day of the month if the original day does not exist in the target month.
-
-```ts
-addMonths('2025-01-31', 1); // => "2025-02-28"
-addMonths('2025-01', 3); // => "2025-04"
-```
-
-### `subMonths(input: CalDateInput, amount: number): CalDate`
-
-### `subMonths(input: YearMonth | YearMonthObj, amount: number): YearMonth`
-
-```ts
-subMonths('2025-03-31', 1); // => "2025-02-28"
-subMonths('2025-06', 2); // => "2025-04"
-```
-
----
-
-## Arithmetic — Quarters
-
-_Accepts `AnyDateInput`. Returns the same string type as the input._
-
-### `addQuarters(input: CalDateInput, amount: number): CalDate`
-
-### `addQuarters(input: YearMonth | YearMonthObj, amount: number): YearMonth`
-
-```ts
-addQuarters('2025-01-31', 1); // => "2025-04-30"
-addQuarters('2025-01', 1); // => "2025-04"
-```
-
-### `subQuarters(input: CalDateInput, amount: number): CalDate`
-
-### `subQuarters(input: YearMonth | YearMonthObj, amount: number): YearMonth`
-
----
-
-## Arithmetic — Years
-
-_Accepts `AnyDateInput`. Returns the same string type as the input._
-
-### `addYears(input: CalDateInput, amount: number): CalDate`
-
-### `addYears(input: YearMonth | YearMonthObj, amount: number): YearMonth`
-
-```ts
-addYears('2024-02-29', 1); // => "2025-02-28"  (clamped, 2025 not a leap year)
-addYears('2024-02', 1); // => "2025-02"
-```
-
-### `subYears(input: CalDateInput, amount: number): CalDate`
-
-### `subYears(input: YearMonth | YearMonthObj, amount: number): YearMonth`
+**Throws `CalDateOptionsError`** if a `days` or `weeks` duration is passed with a `YearMonth` input.
 
 ---
 
 ## Differences
 
-### `differenceInDays(dateLeft: CalDateInput, dateRight: CalDateInput): number`
+### `since(dateLeft: AnyDateInput, dateRight: AnyDateInput, options?: DurationOptions): Duration`
+
+Returns how far `dateRight` is before `dateLeft` as a `Duration`. Positive values mean `dateRight` is earlier. Mirrors `Temporal.PlainDate.prototype.since`.
+
+Units are populated from `largestUnit` down to `smallestUnit`. Units smaller than `smallestUnit` are discarded. Default `largestUnit` is `"days"`.
 
 ```ts
-differenceInDays('2025-04-01', '2025-03-01'); // => 31
+since('2025-04-01', '2025-03-01');
+// => { days: 31 }
+
+since('2025-04-01', '2025-01-15', { largestUnit: 'months' });
+// => { months: 2, days: 17 }
+
+since('2026-06-01', '2024-01-15', { largestUnit: 'years', smallestUnit: 'months' });
+// => { years: 2, months: 4 }  (days discarded)
 ```
 
-### `differenceInWeeks(dateLeft: CalDateInput, dateRight: CalDateInput): number`
+**Throws `CalDateOptionsError`** if `smallestUnit` is larger than `largestUnit`.
 
-Whole weeks only.
+---
+
+### `until(dateLeft: AnyDateInput, dateRight: AnyDateInput, options?: DurationOptions): Duration`
+
+Returns how far `dateRight` is after `dateLeft` as a `Duration`. Positive values mean `dateRight` is later. Mirrors `Temporal.PlainDate.prototype.until`.
 
 ```ts
-differenceInWeeks('2025-03-22', '2025-03-01'); // => 3
+until('2025-01-15', '2025-04-01');
+// => { days: 75 }
+
+until('2025-01-15', '2026-06-01', { largestUnit: 'years', smallestUnit: 'months' });
+// => { years: 1, months: 4 }  (days discarded)
 ```
 
-### `differenceInMonths(dateLeft: AnyDateInput, dateRight: AnyDateInput): number`
-
-Exact difference — accounts for partial months.
-
-```ts
-differenceInMonths('2025-03-15', '2025-01-31'); // => 1
-```
-
-### `differenceInCalendarMonths(dateLeft: AnyDateInput, dateRight: AnyDateInput): number`
-
-Calendar month boundary count, regardless of day.
-
-```ts
-differenceInCalendarMonths('2025-02-01', '2025-01-31'); // => 1
-```
-
-### `differenceInQuarters(dateLeft: AnyDateInput, dateRight: AnyDateInput): number`
-
-Exact difference.
-
-### `differenceInCalendarQuarters(dateLeft: AnyDateInput, dateRight: AnyDateInput): number`
-
-### `differenceInYears(dateLeft: AnyDateInput, dateRight: AnyDateInput): number`
-
-Exact difference — accounts for partial years.
-
-```ts
-differenceInYears('2025-02-28', '2024-03-01'); // => 0
-```
-
-### `differenceInCalendarYears(dateLeft: AnyDateInput, dateRight: AnyDateInput): number`
-
-```ts
-differenceInCalendarYears('2025-01-01', '2024-12-31'); // => 1
-```
+**Throws `CalDateOptionsError`** if `smallestUnit` is larger than `largestUnit`.
 
 ---
 
@@ -784,30 +723,163 @@ isLeapYear('2025-03'); // => false
 
 ---
 
-## TODO: Conversion Helpers
+## Conversion Helpers
 
-> **Status: Not yet designed.** This section is reserved for functions that convert between `CalDate`/`YearMonth` and native JavaScript types.
->
-> **From native types to `CalDate` / `YearMonth`:**
->
-> - `fromDate(date: Date): CalDate` — extract the **local** date from a `Date` object
-> - `fromDateUTC(date: Date): CalDate` — extract the **UTC** date from a `Date` object
-> - `fromTimestamp(ts: number): CalDate` — convert a Unix timestamp (ms) to a local `CalDate`
-> - `fromTimestampUTC(ts: number): CalDate` — convert a Unix timestamp (ms) to a UTC `CalDate`
-> - `fromISOString(iso: string): CalDate` — parse an ISO 8601 datetime string (e.g. `"2025-03-15T10:30:00Z"`) and extract the date portion
->
-> **From `CalDate` / `YearMonth` to native types:**
->
-> - `toDate(input: CalDateInput): Date` — returns a `Date` at midnight local time
-> - `toDateUTC(input: CalDateInput): Date` — returns a `Date` at midnight UTC
-> - `toTimestamp(input: CalDateInput): number` — Unix timestamp (ms) at midnight local time
-> - `toTimestampUTC(input: CalDateInput): number` — Unix timestamp (ms) at midnight UTC
->
-> **Design decisions still to be made:**
->
-> - Whether `fromDate` / `fromDateUTC` should be a single function with a `utc` option flag, or two explicit functions (explicit preferred for tree-shaking and readability)
-> - How `YearMonth` inputs behave in `toDate` / `toTimestamp` — default to 1st of the month, or require explicit conversion via `toCalDate` first?
-> - Whether to expose a `toISOString` that round-trips cleanly with `fromISOString`
+Functions for converting between `CalDate`/`YearMonth` and native JavaScript types. All conversions involving `Date` objects or timestamps use **UTC** exclusively to avoid timezone-related date shifts — see implementation notes below.
+
+---
+
+### From native types to `CalDate`
+
+#### `fromDate(date: Date): CalDate`
+
+Extracts the **local** calendar date from a `Date` object.
+
+```ts
+// Assuming local timezone is UTC+1
+fromDate(new Date('2025-03-15T00:30:00+01:00')); // => "2025-03-15"
+```
+
+#### `fromDateUTC(date: Date): CalDate`
+
+Extracts the **UTC** calendar date from a `Date` object.
+
+```ts
+fromDateUTC(new Date('2025-03-15T00:30:00+01:00')); // => "2025-03-14"  (UTC)
+```
+
+#### `fromTimestamp(ts: number): CalDate`
+
+Converts a Unix timestamp in **milliseconds** to a local `CalDate`.
+
+```ts
+fromTimestamp(1741996800000); // => "2025-03-15"  (local)
+```
+
+#### `fromTimestampUTC(ts: number): CalDate`
+
+Converts a Unix timestamp in **milliseconds** to a UTC `CalDate`.
+
+```ts
+fromTimestampUTC(1741996800000); // => "2025-03-15"  (UTC)
+```
+
+#### `fromTimestampSeconds(ts: number): CalDate`
+
+Converts a Unix timestamp in **seconds** (common in databases and server APIs) to a local `CalDate`.
+
+```ts
+fromTimestampSeconds(1741996800); // => "2025-03-15"  (local)
+```
+
+#### `fromTimestampSecondsUTC(ts: number): CalDate`
+
+Converts a Unix timestamp in **seconds** to a UTC `CalDate`.
+
+#### `fromISOString(iso: string): CalDate`
+
+Extracts the date portion from an ISO 8601 datetime string. The timezone offset in the string is respected — the date is extracted after adjusting to UTC.
+
+```ts
+fromISOString('2025-03-15T10:30:00Z'); // => "2025-03-15"
+fromISOString('2025-03-15T00:30:00+01:00'); // => "2025-03-14"  (UTC date)
+fromISOString('2025-03-15T00:30:00-05:00'); // => "2025-03-15"  (UTC date)
+```
+
+---
+
+### From `CalDate` / `YearMonth` to native types
+
+#### `toDate(input: CalDateInput): Date`
+
+Returns a `Date` at **midnight UTC** for the given calendar date.
+
+```ts
+toDate('2025-03-15'); // => Date("2025-03-15T00:00:00.000Z")
+```
+
+#### `toTimestamp(input: CalDateInput): number`
+
+Returns a Unix timestamp in **milliseconds** at midnight UTC.
+
+```ts
+toTimestamp('2025-03-15'); // => 1741996800000
+```
+
+#### `toTimestampSeconds(input: CalDateInput): number`
+
+Returns a Unix timestamp in **seconds** at midnight UTC.
+
+```ts
+toTimestampSeconds('2025-03-15'); // => 1741996800
+```
+
+#### `toISOString(input: CalDateInput): string`
+
+Returns an ISO 8601 datetime string at midnight UTC. Round-trips cleanly with `fromISOString`.
+
+```ts
+toISOString('2025-03-15'); // => "2025-03-15T00:00:00.000Z"
+```
+
+---
+
+### Temporal conversions
+
+#### `fromTemporal(date: Temporal.PlainDate): CalDate`
+
+Converts a `Temporal.PlainDate` to a `CalDate` string.
+
+```ts
+fromTemporal(Temporal.PlainDate.from('2025-03-15')); // => "2025-03-15"
+```
+
+#### `fromTemporalYearMonth(ym: Temporal.PlainYearMonth): YearMonth`
+
+Converts a `Temporal.PlainYearMonth` to a `YearMonth` string.
+
+```ts
+fromTemporalYearMonth(Temporal.PlainYearMonth.from('2025-03')); // => "2025-03"
+```
+
+#### `toTemporal(input: CalDateInput): Temporal.PlainDate`
+
+Converts a `CalDate` or `CalDateObj` to a `Temporal.PlainDate`.
+
+```ts
+toTemporal('2025-03-15'); // => Temporal.PlainDate { year: 2025, month: 3, day: 15 }
+```
+
+#### `toTemporalYearMonth(input: AnyDateInput): Temporal.PlainYearMonth`
+
+Converts any input to a `Temporal.PlainYearMonth`.
+
+```ts
+toTemporalYearMonth('2025-03-15'); // => Temporal.PlainYearMonth { year: 2025, month: 3 }
+toTemporalYearMonth('2025-03'); // => Temporal.PlainYearMonth { year: 2025, month: 3 }
+```
+
+---
+
+### Implementation Notes
+
+> These notes are intended to guide the implementation. They are not part of the public API.
+
+**Why UTC throughout**
+
+All `toDate`, `toTimestamp`, and `toISOString` functions produce midnight UTC. This ensures the calendar date is always preserved regardless of the runtime's local timezone. A user in UTC-5 calling `toDate("2025-03-15")` should always get March 15th, not March 14th at 7pm local time.
+
+**`fromDate` vs `fromDateUTC`**
+
+These are intentionally two explicit functions rather than a single function with a `utc` flag. The distinction is meaningful and the explicit names make the intent clear at the call site — a `utc` boolean parameter is easy to pass incorrectly or misread.
+
+**`YearMonth` in `toDate` / `toTimestamp`**
+
+`toDate` and `toTimestamp` accept `CalDateInput` only. Users with a `YearMonth` should call `toCalDate` first to make the day explicit, rather than having the library silently default to the 1st. This avoids surprising implicit behaviour.
+
+**Temporal feature detection**
+
+The Temporal conversion functions should check for `Temporal` availability at runtime and throw a clear error if it is not available, rather than failing with a cryptic reference error. Temporal is available in Node.js 22+ and modern browsers as of 2025, but may not be present in all environments.
 
 ---
 

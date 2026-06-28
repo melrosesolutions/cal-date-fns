@@ -1,27 +1,32 @@
 # cal-date-fns API Reference
 
+**Status legend:** 🟢 Implemented &nbsp;·&nbsp; 🟡 Designed (spec finalised, not yet coded) &nbsp;·&nbsp; ⚪ Draft (still being discussed)
+
+> Everything below is 🟡 **Designed** unless marked otherwise. This reflects the spec, not what you can currently `npm install` and use.
+
 ## Table of Contents
 
 - [Types](#types)
 - [Error Classes](#error-classes)
-- [Parsing & Validation](#parsing--validation)
-- [Formatting](#formatting)
-- [Arithmetic](#arithmetic)
-- [Differences](#differences)
-- [Comparison](#comparison)
-- [Day-of-week](#day-of-week)
-- [Getters](#getters)
-- [Setters](#setters)
-- [Start & End Boundaries](#start--end-boundaries)
-- [Current Date Helpers](#current-date-helpers)
-- [Is Same Comparisons](#is-same-comparisons)
-- [Range Utilities](#range-utilities)
-- [Human-readable Distance](#human-readable-distance)
-- [Predicates](#predicates)
-- [Conversion Helpers](#conversion-helpers)
-- [Intl API Helpers](#intl-api-helpers)
-- [Month Formatter](#createmonthformatterlocale-string-style-long--short--narrow-calmontformatter)
-- [Day Formatter](#createdayformatterlocale-string-style-long--short--narrow-caldayformatter)
+- [Parsing & Validation](#parsing--validation) 🟡
+- [Formatting](#formatting) 🟡
+- [Arithmetic](#arithmetic) 🟡
+- [Differences](#differences) 🟡
+- [Comparison](#comparison) 🟡
+- [Day-of-week](#day-of-week) 🟡
+- [Getters](#getters) 🟡
+- [Setters](#setters) 🟡
+- [Start & End Boundaries](#start--end-boundaries) 🟡
+- [Current Date Helpers](#current-date-helpers) 🟡
+- [Is Same Comparisons](#is-same-comparisons) 🟡
+- [Range Utilities](#range-utilities) 🟡
+- [Human-readable Distance](#human-readable-distance) 🟡
+- [Predicates](#predicates) 🟡
+- [Epoch Helpers](#epoch-helpers) 🟡
+- [Conversion Helpers](#conversion-helpers) 🟡
+- [Intl API Helpers](#intl-api-helpers) 🟡
+- [Month Formatter](#createmonthformatterlocale-string-style-long--short--narrow-calmontformatter) 🟡
+- [Day Formatter](#createdayformatterlocale-string-style-long--short--narrow-caldayformatter) 🟡
 
 ---
 
@@ -84,7 +89,7 @@ class CalDateOptionsError extends Error {}
 
 ---
 
-## Parsing & Validation
+## Parsing & Validation 🟡
 
 ### `parse(value: string, format: string, options?: ParseOptions): CalDate | YearMonth`
 
@@ -180,7 +185,7 @@ toYearMonth({ y: 2025, m: 3, d: 15 }); // => "2025-03"
 
 ---
 
-## Formatting
+## Formatting 🟡
 
 ### `format(input: AnyDateInput, formatStr: string): string`
 
@@ -209,7 +214,7 @@ format('2025-03', 'MMM YYYY'); // => "Mar 2025"
 
 ---
 
-## Arithmetic
+## Arithmetic 🟡
 
 ### `add(input: CalDateInput, duration: Duration): CalDate`
 
@@ -248,7 +253,7 @@ subtract('2025-04', { months: 2 }); // => "2025-02"
 
 ---
 
-## Differences
+## Differences 🟡
 
 ### `since(dateLeft: AnyDateInput, dateRight: AnyDateInput, options?: DurationOptions): Duration`
 
@@ -287,7 +292,7 @@ until('2025-01-15', '2026-06-01', { largestUnit: 'years', smallestUnit: 'months'
 
 ---
 
-## Comparison
+## Comparison 🟡
 
 ### `compareAsc(dateLeft: AnyDateInput, dateRight: AnyDateInput): -1 | 0 | 1`
 
@@ -346,7 +351,7 @@ Returns the index of the closest date.
 
 ---
 
-## Day-of-week
+## Day-of-week 🟡
 
 _Accepts `CalDateInput` only._
 
@@ -370,7 +375,7 @@ Returns `true` if the date falls on Saturday or Sunday.
 
 ---
 
-## Getters
+## Getters 🟡
 
 ### `getDay(date: CalDateInput): number`
 
@@ -431,7 +436,7 @@ The ISO week-numbering year. May differ from the calendar year near year boundar
 
 ---
 
-## Setters
+## Setters 🟡
 
 _All functions return a string of the same type as the input, unless noted._
 
@@ -484,7 +489,7 @@ Sets the ISO week-numbering year.
 
 ---
 
-## Start & End Boundaries
+## Start & End Boundaries 🟡
 
 ### `startOfWeek(date: CalDateInput): CalDate`
 
@@ -493,10 +498,6 @@ Returns the Sunday of the week containing `date`.
 ### `endOfWeek(date: CalDateInput): CalDate`
 
 Returns the Saturday of the week containing `date`.
-
-### `lastDayOfWeek(date: CalDateInput): CalDate`
-
-Alias of `endOfWeek`.
 
 ### `startOfMonth(input: AnyDateInput): CalDate`
 
@@ -516,10 +517,6 @@ endOfMonth('2025-02'); // => "2025-02-28"
 endOfMonth('2024-02'); // => "2024-02-29"
 ```
 
-### `lastDayOfMonth(input: AnyDateInput): CalDate`
-
-Alias of `endOfMonth`.
-
 ### `startOfQuarter(input: AnyDateInput): CalDate`
 
 ```ts
@@ -531,10 +528,6 @@ startOfQuarter('2025-05-15'); // => "2025-04-01"
 ```ts
 endOfQuarter('2025-05-15'); // => "2025-06-30"
 ```
-
-### `lastDayOfQuarter(input: AnyDateInput): CalDate`
-
-Alias of `endOfQuarter`.
 
 ### `startOfYear(input: AnyDateInput): CalDate`
 
@@ -548,10 +541,6 @@ startOfYear('2025-06'); // => "2025-01-01"
 endOfYear('2025-06'); // => "2025-12-31"
 ```
 
-### `lastDayOfYear(input: AnyDateInput): CalDate`
-
-Alias of `endOfYear`.
-
 ### `startOfISOWeek(date: CalDateInput): CalDate`
 
 Returns the Monday of the ISO week containing `date`.
@@ -559,10 +548,6 @@ Returns the Monday of the ISO week containing `date`.
 ### `endOfISOWeek(date: CalDateInput): CalDate`
 
 Returns the Sunday of the ISO week containing `date`.
-
-### `lastDayOfISOWeek(date: CalDateInput): CalDate`
-
-Alias of `endOfISOWeek`.
 
 ### `startOfISOYear(date: CalDateInput): CalDate`
 
@@ -572,13 +557,9 @@ Returns the first day of the ISO week-numbering year.
 
 Returns the last day of the ISO week-numbering year.
 
-### `lastDayOfISOYear(date: CalDateInput): CalDate`
-
-Alias of `endOfISOYear`.
-
 ---
 
-## Current Date Helpers
+## Current Date Helpers 🟡
 
 ### `today(): CalDate`
 
@@ -606,7 +587,7 @@ Returns last month as a `YYYY-MM` string.
 
 ---
 
-## Is Same Comparisons
+## Is Same Comparisons 🟡
 
 ### `isSameDay(dateLeft: CalDateInput, dateRight: CalDateInput): boolean`
 
@@ -641,7 +622,7 @@ isSameMonth('2025-03-01', '2025-03'); // => true
 
 ---
 
-## Range Utilities
+## Range Utilities 🟡
 
 ### `isWithinRange(date: AnyDateInput, start: AnyDateInput, end: AnyDateInput): boolean`
 
@@ -673,7 +654,7 @@ eachMonth('2025-01', '2025-04');
 
 ---
 
-## Human-readable Distance
+## Human-readable Distance 🟡
 
 ### `formatDistance(dateLeft: AnyDateInput, dateRight: AnyDateInput): string`
 
@@ -700,7 +681,7 @@ formatDistanceToNow('2025-07-01'); // => "in 2 months"
 
 ---
 
-## Predicates
+## Predicates 🟡
 
 ### `isFirstDayOfMonth(date: CalDateInput): boolean`
 
@@ -723,7 +704,32 @@ isLeapYear('2025-03'); // => false
 
 ---
 
-## Conversion Helpers
+## Epoch Helpers 🟡
+
+Low-level primitives for converting between a `CalDateObj` and a single integer day count. These are the building blocks the rest of the library uses internally for arithmetic, comparison, and differences — exposed publicly because they're also genuinely useful for consumers doing custom calendar math (e.g. building a calendar grid UI, calculating business days, implementing your own date algorithms on top of this library).
+
+### `toEpochDay(input: CalDateInput): number`
+
+Converts a calendar date to an integer count of days since a fixed epoch (implementation detail; the epoch value itself is not part of the public contract — only that it is internally consistent and monotonic).
+
+```ts
+toEpochDay('2025-03-15');
+// => some integer N
+```
+
+### `fromEpochDay(epochDay: number): CalDate`
+
+Converts an integer day count back to a `CalDate` string. Round-trips cleanly with `toEpochDay`.
+
+```ts
+fromEpochDay(toEpochDay('2025-03-15')); // => "2025-03-15"
+```
+
+**Why expose this?**
+
+Most calendar arithmetic — adding days, comparing dates, computing differences — reduces cleanly to integer arithmetic once a date is expressed as a single day count. Consumers building custom logic beyond what this library provides (e.g. "every 3rd weekday", custom recurrence rules, business-day calculators) can use `toEpochDay`/`fromEpochDay` as a foundation rather than reimplementing calendar math from scratch.
+
+---
 
 Functions for converting between `CalDate`/`YearMonth` and native JavaScript types. All conversions involving `Date` objects or timestamps use **UTC** exclusively to avoid timezone-related date shifts — see implementation notes below.
 
@@ -883,7 +889,7 @@ The Temporal conversion functions should check for `Temporal` availability at ru
 
 ---
 
-## Intl API Helpers
+## Intl API Helpers 🟡
 
 > **Status: Designed, not yet implemented.**
 

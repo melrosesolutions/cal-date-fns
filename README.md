@@ -1,5 +1,7 @@
 # cal-date-fns
 
+> **⚠️ Status: API design phase.** The interface described below is finalised, but implementation hasn't started yet. Nothing in this package is installable/usable as real code just yet — see [docs/API.md](./docs/API.md) for per-function status. Star/watch the repo to follow progress.
+
 A TypeScript utility library for working with calendar dates — no time zones, no timestamps, no surprises.
 
 Inspired by [date-fns](https://date-fns.org), but purpose-built for **ISO 8601 calendar strings**: `YYYY-MM-DD` and `YYYY-MM`. If your app works with dates as strings (booking systems, scheduling, reporting, data pipelines), this library is for you.
@@ -9,9 +11,9 @@ Inspired by [date-fns](https://date-fns.org), but purpose-built for **ISO 8601 c
 JavaScript's `Date` object is a point in time, not a calendar date. This causes well-known pain: time zone shifts, DST bugs, and off-by-one errors when all you wanted was "the last day of March". `cal-date-fns` sidesteps all of that by working directly with ISO date strings.
 
 ```ts
-import { addMonths, endOfMonth, isWeekend } from 'cal-date-fns';
+import { add, endOfMonth, isWeekend } from 'cal-date-fns';
 
-addMonths('2025-01-31', 1); // => "2025-02-28"
+add('2025-01-31', { months: 1 }); // => "2025-02-28"
 endOfMonth('2025-02'); // => "2025-02-28"
 isWeekend('2025-03-15'); // => true
 ```
@@ -52,29 +54,21 @@ Months are **1-based** (January = 1), consistent with ISO 8601.
 ## Quick Examples
 
 ```ts
-import {
-  addDays,
-  addMonths,
-  differenceInDays,
-  startOfMonth,
-  endOfMonth,
-  format,
-  isAfter,
-  eachMonth,
-} from 'cal-date-fns';
+import { add, since, startOfMonth, endOfMonth, format, isAfter, eachMonth } from 'cal-date-fns';
 
-// Arithmetic
-addDays('2025-03-28', 5); // => "2025-04-02"
-addMonths('2025-01-31', 1); // => "2025-02-28"
-addMonths('2025-01', 3); // => "2025-04"
+// Arithmetic — a single duration object instead of separate addDays/addMonths/etc
+add('2025-03-28', { days: 5 }); // => "2025-04-02"
+add('2025-01-31', { months: 1 }); // => "2025-02-28"
+add('2025-01', { months: 3 }); // => "2025-04"
 
 // Boundaries
 startOfMonth('2025-03-15'); // => "2025-03-01"
 startOfMonth('2025-03'); // => "2025-03-01"
 endOfMonth('2025-02'); // => "2025-02-28"
 
-// Differences
-differenceInDays('2025-04-01', '2025-03-01'); // => 31
+// Differences — returns a Duration object, mirroring the Temporal API
+since('2025-04-01', '2025-03-01');
+// => { days: 31 }
 
 // Ranges
 eachMonth('2025-01', '2025-03');
@@ -92,7 +86,7 @@ format('2025-03-15', 'DD MMM YYYY'); // => "15 Mar 2025"
 All functions also accept object forms:
 
 ```ts
-addDays({ y: 2025, m: 3, d: 28 }, 5); // => "2025-04-02"
+add({ y: 2025, m: 3, d: 28 }, { days: 5 }); // => "2025-04-02"
 endOfMonth({ y: 2025, m: 2 }); // => "2025-02-28"
 ```
 

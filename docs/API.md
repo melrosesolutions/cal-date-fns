@@ -22,7 +22,7 @@
 - [Range Utilities](#range-utilities) 🟡
 - [Human-readable Distance](#human-readable-distance) 🟡
 - [Predicates](#predicates) 🟡
-- [Epoch Helpers](#epoch-helpers) 🟡
+- [Epoch Helpers](#epoch-helpers) 🟢
 - [Conversion Helpers](#conversion-helpers) 🟡
 - [Intl API Helpers](#intl-api-helpers) 🟡
 - [Month Formatter](#createmonthformatterlocale-string-style-long--short--narrow-calmontformatter) 🟡
@@ -704,17 +704,17 @@ isLeapYear('2025-03'); // => false
 
 ---
 
-## Epoch Helpers 🟡
+## Epoch Helpers 🟢
 
 Low-level primitives for converting between a `CalDateObj` and a single integer day count. These are the building blocks the rest of the library uses internally for arithmetic, comparison, and differences — exposed publicly because they're also genuinely useful for consumers doing custom calendar math (e.g. building a calendar grid UI, calculating business days, implementing your own date algorithms on top of this library).
 
 ### `toEpochDay(input: CalDateInput): number`
 
-Converts a calendar date to an integer count of days since a fixed epoch (implementation detail; the epoch value itself is not part of the public contract — only that it is internally consistent and monotonic).
+Converts a calendar date to an integer count of days since a fixed epoch (currently 1970-01-01, i.e. `toEpochDay("1970-01-01") === 0`; the exact epoch is an implementation detail and not part of the public contract — only that it is internally consistent and monotonic is guaranteed).
 
 ```ts
-toEpochDay('2025-03-15');
-// => some integer N
+toEpochDay('1970-01-01'); // => 0
+toEpochDay('2025-03-15'); // => 20162
 ```
 
 ### `fromEpochDay(epochDay: number): CalDate`

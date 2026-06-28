@@ -1,18 +1,21 @@
 # cal-date-fns — Source File Structure (Revised)
 
-> **Status: Plan only — not yet implemented.** This document describes the intended layout of `src/` once development starts. It does not reflect the current contents of the repository. See [docs/API.md](./API.md) for per-function implementation status.
+> **Status: Foundation layer implemented.** `types/`, `errors/`, `internal/`, and `epoch/` exist and are fully tested — see [docs/API.md](./API.md) for per-function implementation status. Everything else below is still planned, not yet built.
 
 One function per file, kebab-case filenames. **No per-folder barrel files** — only a single `src/index.ts` at the root, which does explicit named re-exports from every individual file. This avoids `export *` tree-shaking ambiguity entirely and keeps the full public surface visible in one place.
+
+**Naming convention for type-only files:** any file with **zero runtime exports** (only `type`/`interface` declarations) uses a `.type.ts` suffix, e.g. `cal-date.type.ts`. This lets `vitest.config.ts` exclude all of them from coverage with a single robust glob (`src/**/*.type.ts`) rather than an explicit, easily-stale file list. If a file mixes type declarations with real runtime code (e.g. a constant), split it: the types go in `<name>.type.ts`, the runtime code goes in `<name>.constant.ts` (or `<name>.ts` if it's a function rather than a constant) and imports the types from the `.type.ts` file as needed.
 
 ```
 src/
 ├── index.ts                      # the ONLY barrel — named re-exports from every public file below
 │
 ├── types/
-│   ├── cal-date.ts                # CalDate, CalDateObj, CalDateInput types
-│   ├── year-month.ts              # YearMonth, YearMonthObj types
-│   ├── any-date-input.ts          # AnyDateInput union type
-│   └── duration.ts                # Duration, DurationUnit, DurationOptions
+│   ├── cal-date.type.ts            # CalDate, CalDateObj, CalDateInput types (no runtime code)
+│   ├── year-month.type.ts          # YearMonth, YearMonthObj types (no runtime code)
+│   ├── any-date-input.type.ts      # AnyDateInput union type (no runtime code)
+│   ├── duration.type.ts            # Duration, DurationUnit, DurationOptions (no runtime code)
+│   └── duration.constant.ts        # DURATION_UNIT_ORDER — split out because it's runtime code
 │
 ├── errors/
 │   ├── cal-date-format-error.ts
@@ -209,8 +212,8 @@ src/
 
 ## Outstanding doc updates (do alongside or before implementation starts)
 
-- [ ] Remove alias function entries from `docs/API.md` (Boundaries section)
-- [ ] Add `toEpochDay` / `fromEpochDay` as a new public section in `docs/API.md`
+- [x] Remove alias function entries from `docs/API.md` (Boundaries section) — done
+- [x] Add `toEpochDay` / `fromEpochDay` as a new public section in `docs/API.md` — done
 
 ## Suggested build order (unchanged)
 

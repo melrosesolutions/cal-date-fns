@@ -1,6 +1,6 @@
 {
   "name": "cal-date-fns",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A TypeScript utility library for calendar date functions",
   "keywords": [],
   "author": "",

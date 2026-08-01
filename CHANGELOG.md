@@ -1,5 +1,11 @@
 # cal-date-fns
 
+## 0.5.0
+
+### Minor Changes
+
+- 9a5ba81: add initial add+subtract functions
+
 ## 0.4.0
 
 ### Minor Changes

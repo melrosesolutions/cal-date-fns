@@ -216,7 +216,7 @@ format('2025-03', 'MMM YYYY'); // => "Mar 2025"
 
 ---
 
-## Arithmetic 🟡
+## Arithmetic �
 
 ### `add(input: CalDateInput, duration: Duration): CalDate`
 
@@ -246,7 +246,7 @@ add('2025-01', { years: 1, months: 2 }); // => "2026-03"
 Subtracts a duration from a date or month. Follows the same rules as `add`.
 
 ```ts
-subtract('2025-03-20', { months: 2, days: 5 }); // => "2025-01-13"
+subtract('2025-03-20', { months: 2, days: 5 }); // => "2025-01-15"
 subtract('2025-03-31', { months: 1 }); // => "2025-02-28"  (clamped)
 subtract('2025-04', { months: 2 }); // => "2025-02"
 ```

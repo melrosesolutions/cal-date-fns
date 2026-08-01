@@ -23,6 +23,10 @@ export { CalDateOptionsError } from './errors/cal-date-options-error';
 export { toEpochDay } from './epoch/to-epoch-day';
 export { fromEpochDay } from './epoch/from-epoch-day';
 
+// ---- Arithmetic ----
+export { add } from './arithmetic/add';
+export { subtract } from './arithmetic/subtract';
+
 // ---- Parsing & Validation ----
 export { isCalDate } from './parse/is-cal-date';
 export { isValid } from './parse/is-valid';

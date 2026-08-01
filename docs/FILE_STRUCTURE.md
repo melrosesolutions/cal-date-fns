@@ -1,6 +1,6 @@
 # cal-date-fns — Source File Structure (Revised)
 
-> **Status: Foundation layer implemented.** `types/`, `errors/`, `internal/`, and `epoch/` exist and are fully tested — see [docs/API.md](./API.md) for per-function implementation status. Everything else below is still planned, not yet built.
+> **Status: Foundation + partial `parse/` implemented.** `types/`, `errors/`, `internal/`, `epoch/` are complete. `parse/` has `toObject`, `isValid`, `isCalDate`, `isYearMonth`, `toCalDate`, `toYearMonth` implemented — `parse.ts` itself (the format-string parser) is still pending, deliberately left for later. Everything else below is still planned, not yet built. See [docs/API.md](./API.md) for per-function implementation status.
 
 One function per file, kebab-case filenames. **No per-folder barrel files** — only a single `src/index.ts` at the root, which does explicit named re-exports from every individual file. This avoids `export *` tree-shaking ambiguity entirely and keeps the full public surface visible in one place.
 

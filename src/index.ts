@@ -22,3 +22,11 @@ export { CalDateOptionsError } from './errors/cal-date-options-error';
 // ---- Epoch Helpers ----
 export { toEpochDay } from './epoch/to-epoch-day';
 export { fromEpochDay } from './epoch/from-epoch-day';
+
+// ---- Parsing & Validation ----
+export { isCalDate } from './parse/is-cal-date';
+export { isValid } from './parse/is-valid';
+export { isYearMonth } from './parse/is-year-month';
+export { toCalDate } from './parse/to-cal-date';
+export { toObject } from './parse/to-object';
+export { toYearMonth } from './parse/to-year-month';

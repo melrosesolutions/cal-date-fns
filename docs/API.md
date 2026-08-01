@@ -91,7 +91,9 @@ class CalDateOptionsError extends Error {}
 
 ## Parsing & Validation 🟡
 
-### `parse(value: string, format: string, options?: ParseOptions): CalDate | YearMonth`
+> `toObject`, `isValid`, `isCalDate`, `isYearMonth`, `toCalDate`, and `toYearMonth` below are 🟢 **Implemented**. `parse()` itself (the format-string parser) is still 🟡 **Designed** — deliberately left until last due to its complexity (see implementation note below).
+
+### `parse(value: string, format: string, options?: ParseOptions): CalDate | YearMonth` 🟡
 
 Parses a formatted date string into a `CalDate` or `YearMonth` using a token-based format string. Inspired by `date-fns/parse`.
 
@@ -135,7 +137,7 @@ interface ParseOptions {
 
 ---
 
-### `toObject(input: AnyDateInput): CalDateObj | YearMonthObj`
+### `toObject(input: AnyDateInput): CalDateObj | YearMonthObj` 🟢
 
 Normalises any input to its object form. Returns a `CalDateObj` if the input includes a day, otherwise a `YearMonthObj`.
 
@@ -145,7 +147,7 @@ toObject('2025-03'); // => { y: 2025, m: 3 }
 toObject({ y: 2025, m: 3, d: 15 }); // => { y: 2025, m: 3, d: 15 }
 ```
 
-### `isValid(input: unknown): boolean`
+### `isValid(input: unknown): boolean` 🟢
 
 Returns `true` if the input is a valid `CalDate`, `YearMonth`, `CalDateObj`, or `YearMonthObj`.
 
@@ -156,15 +158,15 @@ isValid('2025-02-29'); // => false (2025 is not a leap year)
 isValid('2025-03'); // => true
 ```
 
-### `isCalDate(input: unknown): input is CalDate`
+### `isCalDate(input: unknown): input is CalDate` 🟢
 
-Type guard. Returns `true` if the input is a valid `YYYY-MM-DD` string.
+Type guard. Returns `true` if the input is a valid `YYYY-MM-DD` string. String-only — `CalDateObj`/`YearMonthObj` inputs always return `false` here; use `isValid` if you also want to accept object forms.
 
-### `isYearMonth(input: unknown): input is YearMonth`
+### `isYearMonth(input: unknown): input is YearMonth` 🟢
 
-Type guard. Returns `true` if the input is a valid `YYYY-MM` string.
+Type guard. Returns `true` if the input is a valid `YYYY-MM` string. String-only, same rationale as `isCalDate`.
 
-### `toCalDate(input: AnyDateInput): CalDate`
+### `toCalDate(input: AnyDateInput): CalDate` 🟢
 
 Converts any input to a `YYYY-MM-DD` string. When given a `YearMonth` or `YearMonthObj`, defaults to the 1st of the month.
 
@@ -174,7 +176,7 @@ toCalDate({ y: 2025, m: 3 }); // => "2025-03-01"
 toCalDate({ y: 2025, m: 3, d: 15 }); // => "2025-03-15"
 ```
 
-### `toYearMonth(input: AnyDateInput): YearMonth`
+### `toYearMonth(input: AnyDateInput): YearMonth` 🟢
 
 Converts any input to a `YYYY-MM` string, dropping the day component if present.
 
@@ -710,11 +712,11 @@ Low-level primitives for converting between a `CalDateObj` and a single integer 
 
 ### `toEpochDay(input: CalDateInput): number`
 
-Converts a calendar date to an integer count of days since a fixed epoch (currently 1970-01-01, i.e. `toEpochDay("1970-01-01") === 0`; the exact epoch is an implementation detail and not part of the public contract — only that it is internally consistent and monotonic is guaranteed).
+Converts a calendar date to an integer count of days since a fixed epoch (implementation detail; the epoch value itself is not part of the public contract — only that it is internally consistent and monotonic).
 
 ```ts
-toEpochDay('1970-01-01'); // => 0
-toEpochDay('2025-03-15'); // => 20162
+toEpochDay('2025-03-15');
+// => some integer N
 ```
 
 ### `fromEpochDay(epochDay: number): CalDate`

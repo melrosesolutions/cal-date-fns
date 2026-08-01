@@ -1,5 +1,11 @@
 # cal-date-fns
 
+## 0.4.0
+
+### Minor Changes
+
+- efc531e: add initial parse functions
+
 ## 0.3.0
 
 ### Minor Changes

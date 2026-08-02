@@ -35,6 +35,10 @@ export { until } from './difference/until';
 export { createCalDateFormat } from './intl/create-cal-date-format';
 export type { CalDateFormat } from './intl/cal-date-format.type';
 export type { CalDateFormatOptions } from './intl/cal-date-format-options.type';
+export { createMonthFormatter } from './intl/create-month-formatter';
+export type { CalMonthFormatter } from './intl/cal-month-formatter.type';
+export { createDayFormatter } from './intl/create-day-formatter';
+export type { CalDayFormatter } from './intl/cal-day-formatter.type';
 
 // ---- Parsing & Validation ----
 export { isCalDate } from './parse/is-cal-date';

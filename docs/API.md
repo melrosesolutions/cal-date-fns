@@ -23,9 +23,9 @@
 - [Predicates](#predicates) 🟡
 - [Epoch Helpers](#epoch-helpers) 🟢
 - [Conversion Helpers](#conversion-helpers) 🟡
-- [Intl API Helpers](#intl-api-helpers) 🟡
-- [Month Formatter](#createmonthformatterlocale-string-style-long--short--narrow-calmontformatter) 🟡
-- [Day Formatter](#createdayformatterlocale-string-style-long--short--narrow-caldayformatter) 🟡
+- [Intl API Helpers](#intl-api-helpers) 🟢
+- [Month Formatter](#createmonthformatterlocale-string-style-long--short--narrow-calmontformatter) 🟢
+- [Day Formatter](#createdayformatterlocale-string-style-long--short--narrow-caldayformatter) 🟢
 
 ---
 
@@ -871,9 +871,9 @@ The Temporal conversion functions should check for `Temporal` availability at ru
 
 ---
 
-## Intl API Helpers 🟡
+## Intl API Helpers 🟢
 
-> **Status: Designed, not yet implemented.**
+> **Status: Implemented.**
 
 This section covers locale-aware date formatting via the [ECMAScript Internationalization API (`Intl.DateTimeFormat`)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat).
 `Intl.DurationFormat` and `Intl.RelativeTimeFormat` are intentionally out of scope for simple numeric formatting, but the library exposes a dedicated wrapper factory for relative dates.

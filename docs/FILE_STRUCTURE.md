@@ -171,9 +171,9 @@ src/
 │   └── to-temporal-year-month.ts
 │
 └── intl/
-    ├── create-cal-date-format.ts   # + CalDateFormat, CalDateFormatOptions types
-    ├── create-month-formatter.ts    # + CalMonthFormatter type
-    └── create-day-formatter.ts      # + CalDayFormatter type
+    ├── create-cal-date-format.ts
+    ├── cal-date-format.type.ts
+    └── cal-date-format-options.type.ts
 ```
 
 ---

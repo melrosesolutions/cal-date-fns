@@ -31,6 +31,11 @@ export { subtract } from './arithmetic/subtract';
 export { since } from './difference/since';
 export { until } from './difference/until';
 
+// ---- Intl Helpers ----
+export { createCalDateFormat } from './intl/create-cal-date-format';
+export type { CalDateFormat } from './intl/cal-date-format.type';
+export type { CalDateFormatOptions } from './intl/cal-date-format-options.type';
+
 // ---- Parsing & Validation ----
 export { isCalDate } from './parse/is-cal-date';
 export { isValid } from './parse/is-valid';

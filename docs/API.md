@@ -901,6 +901,24 @@ const fmt = createCalDateFormat('de', { dateStyle: 'long' });
 fmt.format('2025-03-15'); // => "15. März 2025"
 ```
 
+```ts
+const dayNameFmt = createCalDateFormat('en-GB', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+dayNameFmt.format('2025-03-15'); // => "Saturday, 15 March 2025"
+
+const frenchFmt = createCalDateFormat('fr-FR', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+frenchFmt.format('2025-03-15'); // => "samedi 15 mars 2025"
+```
+
 #### `.formatRange(start: AnyDateInput, end: AnyDateInput): string`
 
 Formats a date range as a localised string.
@@ -934,6 +952,8 @@ Returns a formatted date range broken into typed parts.
 ### `CalDateFormatOptions`
 
 A strict subset of `Intl.DateTimeFormatOptions` with all time-related fields removed. Prevents accidentally requesting time components that would be meaningless for calendar dates.
+
+The exported types are declared in `src/intl/cal-date-format.type.ts` and `src/intl/cal-date-format-options.type.ts`.
 
 **Included fields:**
 `dateStyle`, `year`, `month`, `day`, `weekday`, `era`, `calendar`, `numberingSystem`, `localeMatcher`

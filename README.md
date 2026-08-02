@@ -78,7 +78,7 @@ eachMonth('2025-01', '2025-03');
 isAfter('2025-06-01', '2025-03-15'); // => true
 
 // Formatting
-format('2025-03-15', 'DD MMM YYYY'); // => "15 Mar 2025"
+format('2025-03-15', 'DD/MM/YYYY'); // => "15/03/2025"
 ```
 
 ## Object Input

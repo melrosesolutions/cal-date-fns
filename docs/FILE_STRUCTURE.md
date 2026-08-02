@@ -148,11 +148,6 @@ src/
 │   ├── each-day.ts
 │   └── each-month.ts
 │
-├── distance/
-│   ├── format-distance.ts
-│   ├── format-distance-strict.ts
-│   └── format-distance-to-now.ts
-│
 ├── predicates/
 │   ├── is-first-day-of-month.ts
 │   ├── is-last-day-of-month.ts
@@ -176,7 +171,7 @@ src/
 │   └── to-temporal-year-month.ts
 │
 └── intl/
-    ├── create-date-time-format.ts   # + CalDateTimeFormat, CalDateTimeFormatOptions types
+    ├── create-cal-date-format.ts   # + CalDateFormat, CalDateFormatOptions types
     ├── create-month-formatter.ts    # + CalMonthFormatter type
     └── create-day-formatter.ts      # + CalDayFormatter type
 ```

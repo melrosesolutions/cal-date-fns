@@ -20,7 +20,6 @@
 - [Current Date Helpers](#current-date-helpers) 🟡
 - [Is Same Comparisons](#is-same-comparisons) 🟡
 - [Range Utilities](#range-utilities) 🟡
-- [Human-readable Distance](#human-readable-distance) 🟡
 - [Predicates](#predicates) 🟡
 - [Epoch Helpers](#epoch-helpers) 🟢
 - [Conversion Helpers](#conversion-helpers) 🟡
@@ -191,28 +190,26 @@ toYearMonth({ y: 2025, m: 3, d: 15 }); // => "2025-03"
 
 ### `format(input: AnyDateInput, formatStr: string): string`
 
-Formats a date or month using a token-based format string.
+Formats a date or month using a token-based numeric format string.
 
 ```ts
-format('2025-03-15', 'DD MMM YYYY'); // => "15 Mar 2025"
-format('2025-03-15', 'YYYY/MM/DD'); // => "2025/03/15"
-format('2025-03', 'MMM YYYY'); // => "Mar 2025"
+format('2025-03-15', 'DD/MM/YYYY'); // => "15/03/2025"
+format('2025-03-15', 'YYYY-MM-DD'); // => "2025-03-15"
+format('2025-03', 'MM/YYYY'); // => "03/2025"
 ```
 
 **Supported tokens:**
 
-| Token  | Output             | Example    |
-| ------ | ------------------ | ---------- |
-| `YYYY` | Full year          | `2025`     |
-| `YY`   | 2-digit year       | `25`       |
-| `MM`   | 2-digit month      | `03`       |
-| `M`    | Month (no padding) | `3`        |
-| `MMM`  | Short month name   | `Mar`      |
-| `MMMM` | Full month name    | `March`    |
-| `DD`   | 2-digit day        | `05`       |
-| `D`    | Day (no padding)   | `5`        |
-| `DDD`  | Short day name     | `Sat`      |
-| `DDDD` | Full day name      | `Saturday` |
+| Token  | Output             | Example |
+| ------ | ------------------ | ------- |
+| `YYYY` | Full year          | `2025`  |
+| `YY`   | 2-digit year       | `25`    |
+| `MM`   | 2-digit month      | `03`    |
+| `M`    | Month (no padding) | `3`     |
+| `DD`   | 2-digit day        | `05`    |
+| `D`    | Day (no padding)   | `5`     |
+
+`format()` does not support month names, weekday names, or other localized text. For locale-aware output, use `createCalDateFormat()`.
 
 ---
 
@@ -658,33 +655,6 @@ eachMonth('2025-01', '2025-04');
 
 ---
 
-## Human-readable Distance 🟡
-
-### `formatDistance(dateLeft: AnyDateInput, dateRight: AnyDateInput): string`
-
-Returns a human-readable description of the distance between two dates.
-
-```ts
-formatDistance('2025-06-01', '2025-03-01'); // => "3 months"
-formatDistance('2025-03-20', '2025-03-15'); // => "5 days"
-```
-
-### `formatDistanceStrict(dateLeft: AnyDateInput, dateRight: AnyDateInput): string`
-
-Same as `formatDistance` but without rounding. Always uses the largest exact unit.
-
-### `formatDistanceToNow(date: AnyDateInput): string`
-
-Distance between `date` and today.
-
-```ts
-// Assuming today is 2025-05-06
-formatDistanceToNow('2025-03-01'); // => "2 months ago"
-formatDistanceToNow('2025-07-01'); // => "in 2 months"
-```
-
----
-
 ## Predicates 🟡
 
 ### `isFirstDayOfMonth(date: CalDateInput): boolean`
@@ -898,36 +868,36 @@ The Temporal conversion functions should check for `Temporal` availability at ru
 > **Status: Designed, not yet implemented.**
 
 This section covers locale-aware date formatting via the [ECMAScript Internationalization API (`Intl.DateTimeFormat`)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat).
-`Intl.DurationFormat` and `Intl.RelativeTimeFormat` are intentionally out of scope — they work with numbers and plain strings respectively, so there is no `CalDate`/`YearMonth` bridging problem to solve.
+`Intl.DurationFormat` and `Intl.RelativeTimeFormat` are intentionally out of scope for simple numeric formatting, but the library exposes a dedicated wrapper factory for relative dates.
 
 ---
 
-### `createDateTimeFormat(locale: string, options?: CalDateTimeFormatOptions): CalDateTimeFormat`
+### `createCalDateFormat(locale: string, options?: CalDateFormatOptions): CalDateFormat`
 
-Creates and returns a `CalDateTimeFormat` instance — a timezone-safe wrapper around `Intl.DateTimeFormat`.
+Creates and returns a `CalDateFormat` instance — a timezone-safe wrapper around `Intl.DateTimeFormat`.
 
 ```ts
-const fmt = createDateTimeFormat('en-GB', { month: 'long', year: 'numeric' });
+const fmt = createCalDateFormat('en-GB', { month: 'long', year: 'numeric' });
 
 fmt.format('2025-03-15'); // => "March 2025"
 fmt.format('2025-03'); // => "March 2025"
 ```
 
 **Why a factory function rather than `new`?**
-Calling `createDateTimeFormat` once and reusing the instance avoids the significant performance cost of constructing `Intl.DateTimeFormat` objects repeatedly. This matters when formatting many dates — e.g. rendering a calendar grid or processing a large dataset. The user controls the instance lifetime explicitly, which is simpler and more predictable than a hidden module-level cache.
+Calling `createCalDateFormat` once and reusing the instance avoids the significant performance cost of constructing `Intl.DateTimeFormat` objects repeatedly. This matters when formatting many dates — e.g. rendering a calendar grid or processing a large dataset. The user controls the instance lifetime explicitly, which is simpler and more predictable than a hidden module-level cache.
 
 ---
 
-### `CalDateTimeFormat`
+### `CalDateFormat`
 
-The object returned by `createDateTimeFormat`. Mirrors the native `Intl.DateTimeFormat` interface, but all methods accept `AnyDateInput` instead of `Date`.
+The object returned by `createCalDateFormat`. Mirrors the native `Intl.DateTimeFormat` interface, but all methods accept `AnyDateInput` instead of `Date`.
 
 #### `.format(input: AnyDateInput): string`
 
 Formats a date or month as a localised string.
 
 ```ts
-const fmt = createDateTimeFormat('de', { dateStyle: 'long' });
+const fmt = createCalDateFormat('de', { dateStyle: 'long' });
 fmt.format('2025-03-15'); // => "15. März 2025"
 ```
 
@@ -936,7 +906,7 @@ fmt.format('2025-03-15'); // => "15. März 2025"
 Formats a date range as a localised string.
 
 ```ts
-const fmt = createDateTimeFormat('en-GB', { month: 'short', year: 'numeric' });
+const fmt = createCalDateFormat('en-GB', { month: 'short', year: 'numeric' });
 fmt.formatRange('2025-03-01', '2025-05-31'); // => "Mar–May 2025"
 ```
 
@@ -945,7 +915,7 @@ fmt.formatRange('2025-03-01', '2025-05-31'); // => "Mar–May 2025"
 Returns the formatted date broken into typed parts, useful for custom rendering.
 
 ```ts
-const fmt = createDateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const fmt = createCalDateFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 fmt.formatToParts('2025-03-15');
 // => [
 //   { type: "day", value: "15" },
@@ -961,7 +931,7 @@ Returns a formatted date range broken into typed parts.
 
 ---
 
-### `CalDateTimeFormatOptions`
+### `CalDateFormatOptions`
 
 A strict subset of `Intl.DateTimeFormatOptions` with all time-related fields removed. Prevents accidentally requesting time components that would be meaningless for calendar dates.
 
@@ -1000,7 +970,7 @@ Without this approach, a user in UTC-5 formatting `"2025-03-15"` could receive `
 
 **`timeZone` in options**
 
-`timeZone` is stripped from `CalDateTimeFormatOptions` and must not be passed through to the underlying `Intl.DateTimeFormat` constructor. Always override with `"UTC"` internally. Allowing the user to set `timeZone` would silently undermine the entire timezone-safety guarantee.
+`timeZone` is stripped from `CalDateFormatOptions` and must not be passed through to the underlying `Intl.DateTimeFormat` constructor. Always override with `"UTC"` internally. Allowing the user to set `timeZone` would silently undermine the entire timezone-safety guarantee.
 
 **Runtime `Intl` dependency**
 

@@ -10,8 +10,8 @@
 - [Error Classes](#error-classes)
 - [Parsing & Validation](#parsing--validation) 🟡
 - [Formatting](#formatting) 🟡
-- [Arithmetic](#arithmetic) 🟡
-- [Differences](#differences) 🟡
+- [Arithmetic](#arithmetic) 🟢
+- [Differences](#differences) 🟢
 - [Comparison](#comparison) 🟡
 - [Day-of-week](#day-of-week) 🟡
 - [Getters](#getters) 🟡
@@ -216,7 +216,7 @@ format('2025-03', 'MMM YYYY'); // => "Mar 2025"
 
 ---
 
-## Arithmetic �
+## Arithmetic 🟢
 
 ### `add(input: CalDateInput, duration: Duration): CalDate`
 
@@ -255,7 +255,7 @@ subtract('2025-04', { months: 2 }); // => "2025-02"
 
 ---
 
-## Differences 🟡
+## Differences 🟢
 
 ### `since(dateLeft: AnyDateInput, dateRight: AnyDateInput, options?: DurationOptions): Duration`
 
@@ -275,6 +275,8 @@ since('2026-06-01', '2024-01-15', { largestUnit: 'years', smallestUnit: 'months'
 ```
 
 **Throws `CalDateOptionsError`** if `smallestUnit` is larger than `largestUnit`.
+
+YearMonth inputs are treated as the first day of the month for difference calculations.
 
 ---
 

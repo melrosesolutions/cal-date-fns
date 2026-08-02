@@ -27,6 +27,10 @@ export { fromEpochDay } from './epoch/from-epoch-day';
 export { add } from './arithmetic/add';
 export { subtract } from './arithmetic/subtract';
 
+// ---- Differences ----
+export { since } from './difference/since';
+export { until } from './difference/until';
+
 // ---- Parsing & Validation ----
 export { isCalDate } from './parse/is-cal-date';
 export { isValid } from './parse/is-valid';

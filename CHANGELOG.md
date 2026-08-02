@@ -1,5 +1,11 @@
 # cal-date-fns
 
+## 0.6.0
+
+### Minor Changes
+
+- 7caf1db: initial difference, intl, format and parse functions added
+
 ## 0.5.0
 
 ### Minor Changes

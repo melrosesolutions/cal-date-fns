@@ -201,7 +201,7 @@ src/
 
 6. **Distance functions confirmed unrelated to Intl** — `distance/` stays a standalone folder; no dependency on `intl/`.
 
-7. **No proof-of-concept files exist yet** in the working repo we've built here — `src/index.ts` is still the original placeholder (`export const VERSION = "0.1.0"`) from the first scaffolding session. If you have local files in your actual `C:\projects\cal-date-fns` that diverge from this, let us know what's there and we'll fold them in or discard as appropriate.
+7. **Some planned folders are still unimplemented**, but the current repo already contains the core foundation and several working modules. If you have local files in your actual `C:\projects\cal-date-fns` that diverge from this, let us know and we can fold them in or discard as appropriate.
 
 ---
 
@@ -210,13 +210,18 @@ src/
 - [x] Remove alias function entries from `docs/API.md` (Boundaries section) — done
 - [x] Add `toEpochDay` / `fromEpochDay` as a new public section in `docs/API.md` — done
 
-## Suggested build order (unchanged)
+## Suggested build order (updated for current project priorities)
 
 1. `types/`, `errors/`, `internal/`, `epoch/` — foundation, nothing else compiles without these
 2. `parse/` (`to-object`, `is-valid`, `to-cal-date`, `to-year-month` first — leave `parse.ts` itself until later)
 3. `arithmetic/`, `difference/` — core value proposition
-4. `comparison/`, `day-of-week/`, `getters/`, `setters/`, `boundaries/`, `current/`, `is-same/`, `range/`, `predicates/`
-5. `format/`, `distance/`
-6. `parse/parse.ts` — the format-string parser
-7. `conversion/`
-8. `intl/`
+
+> For this project, once the core foundation is in place, a more practical priority order is:
+>
+> - `intl/`
+> - `format/`, `distance/`
+> - `conversion/`
+> - `parse/parse.ts`
+> - `comparison/`, `day-of-week/`, `getters/`, `setters/`, `boundaries/`, `current/`, `is-same/`, `range/`, `predicates/`
+
+This is possible because `intl/` mainly depends on the stable date parsing/conversion layer, not on the full comparison/predicate suite.

@@ -778,6 +778,14 @@ Returns a `Date` at **midnight UTC** for the given calendar date.
 toDate('2025-03-15'); // => Date("2025-03-15T00:00:00.000Z")
 ```
 
+#### `toDateUTC(input: CalDateInput): Date`
+
+Returns a `Date` at **midnight UTC** for the given calendar date. This is the explicit UTC counterpart to `fromDateUTC`, making the conversion pair symmetric.
+
+```ts
+toDateUTC('2025-03-15'); // => Date("2025-03-15T00:00:00.000Z")
+```
+
 #### `toTimestamp(input: CalDateInput): number`
 
 Returns a Unix timestamp in **milliseconds** at midnight UTC.

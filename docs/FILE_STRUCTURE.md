@@ -162,6 +162,7 @@ src/
 │   ├── from-timestamp-seconds-utc.ts
 │   ├── from-iso-string.ts
 │   ├── to-date.ts
+│   ├── to-date-utc.ts
 │   ├── to-timestamp.ts
 │   ├── to-timestamp-seconds.ts
 │   ├── to-iso-string.ts

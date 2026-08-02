@@ -8,7 +8,7 @@
 
 - [Types](#types)
 - [Error Classes](#error-classes)
-- [Parsing & Validation](#parsing--validation) 🟡
+- [Parsing & Validation](#parsing--validation) 🟢
 - [Formatting](#formatting) 🟢
 - [Arithmetic](#arithmetic) 🟢
 - [Differences](#differences) 🟢
@@ -88,11 +88,11 @@ class CalDateOptionsError extends Error {}
 
 ---
 
-## Parsing & Validation 🟡
+## Parsing & Validation 🟢
 
-> `toObject`, `isValid`, `isCalDate`, `isYearMonth`, `toCalDate`, and `toYearMonth` below are 🟢 **Implemented**. `parse()` itself (the format-string parser) is still 🟡 **Designed** — deliberately left until last due to its complexity (see implementation note below).
+> `toObject`, `isValid`, `isCalDate`, `isYearMonth`, `toCalDate`, `toYearMonth`, and `parse()` below are 🟢 **Implemented**.
 
-### `parse(value: string, format: string, options?: ParseOptions): CalDate | YearMonth` 🟡
+### `parse(value: string, format: string, options?: ParseOptions): CalDate | YearMonth` 🟢
 
 Parses a formatted date string into a `CalDate` or `YearMonth` using a token-based format string. Inspired by `date-fns/parse`.
 

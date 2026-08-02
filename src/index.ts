@@ -47,6 +47,7 @@ export { format } from './format/format';
 export { isCalDate } from './parse/is-cal-date';
 export { isValid } from './parse/is-valid';
 export { isYearMonth } from './parse/is-year-month';
+export { parse } from './parse/parse';
 export { toCalDate } from './parse/to-cal-date';
 export { toObject } from './parse/to-object';
 export { toYearMonth } from './parse/to-year-month';

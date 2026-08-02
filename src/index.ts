@@ -32,9 +32,9 @@ export { since } from './difference/since';
 export { until } from './difference/until';
 
 // ---- Intl Helpers ----
-export { createCalDateFormat } from './intl/create-cal-date-format';
-export type { CalDateFormat } from './intl/cal-date-format.type';
-export type { CalDateFormatOptions } from './intl/cal-date-format-options.type';
+export { createCalDateFormatter } from './intl/create-cal-date-formatter';
+export type { CalDateFormatter } from './intl/cal-date-formatter.type';
+export type { CalDateFormatterOptions } from './intl/cal-date-formatter-options.type';
 export { createMonthFormatter } from './intl/create-month-formatter';
 export type { CalMonthFormatter } from './intl/cal-month-formatter.type';
 export { createDayFormatter } from './intl/create-day-formatter';

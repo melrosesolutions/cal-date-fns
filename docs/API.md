@@ -209,7 +209,7 @@ format('2025-03', 'MM/YYYY'); // => "03/2025"
 | `DD`   | 2-digit day        | `05`    |
 | `D`    | Day (no padding)   | `5`     |
 
-`format()` does not support month names, weekday names, or other localized text. For locale-aware output, use `createCalDateFormat()`.
+`format()` does not support month names, weekday names, or other localized text. For locale-aware output, use `createCalDateFormatter()`.
 
 ---
 
@@ -880,37 +880,37 @@ This section covers locale-aware date formatting via the [ECMAScript Internation
 
 ---
 
-### `createCalDateFormat(locale: string, options?: CalDateFormatOptions): CalDateFormat`
+### `createCalDateFormatter(locale: string, options?: CalDateFormatterOptions): CalDateFormatter`
 
-Creates and returns a `CalDateFormat` instance — a timezone-safe wrapper around `Intl.DateTimeFormat`.
+Creates and returns a `CalDateFormatter` instance — a timezone-safe wrapper around `Intl.DateTimeFormat`.
 
 ```ts
-const fmt = createCalDateFormat('en-GB', { month: 'long', year: 'numeric' });
+const fmt = createCalDateFormatter('en-GB', { month: 'long', year: 'numeric' });
 
 fmt.format('2025-03-15'); // => "March 2025"
 fmt.format('2025-03'); // => "March 2025"
 ```
 
 **Why a factory function rather than `new`?**
-Calling `createCalDateFormat` once and reusing the instance avoids the significant performance cost of constructing `Intl.DateTimeFormat` objects repeatedly. This matters when formatting many dates — e.g. rendering a calendar grid or processing a large dataset. The user controls the instance lifetime explicitly, which is simpler and more predictable than a hidden module-level cache.
+Calling `createCalDateFormatter` once and reusing the instance avoids the significant performance cost of constructing `Intl.DateTimeFormat` objects repeatedly. This matters when formatting many dates — e.g. rendering a calendar grid or processing a large dataset. The user controls the instance lifetime explicitly, which is simpler and more predictable than a hidden module-level cache.
 
 ---
 
-### `CalDateFormat`
+### `CalDateFormatter`
 
-The object returned by `createCalDateFormat`. Mirrors the native `Intl.DateTimeFormat` interface, but all methods accept `AnyDateInput` instead of `Date`.
+The object returned by `createCalDateFormatter`. Mirrors the native `Intl.DateTimeFormat` interface, but all methods accept `AnyDateInput` instead of `Date`.
 
 #### `.format(input: AnyDateInput): string`
 
 Formats a date or month as a localised string.
 
 ```ts
-const fmt = createCalDateFormat('de', { dateStyle: 'long' });
+const fmt = createCalDateFormatter('de', { dateStyle: 'long' });
 fmt.format('2025-03-15'); // => "15. März 2025"
 ```
 
 ```ts
-const dayNameFmt = createCalDateFormat('en-GB', {
+const dayNameFmt = createCalDateFormatter('en-GB', {
   weekday: 'long',
   day: 'numeric',
   month: 'long',
@@ -918,7 +918,7 @@ const dayNameFmt = createCalDateFormat('en-GB', {
 });
 dayNameFmt.format('2025-03-15'); // => "Saturday, 15 March 2025"
 
-const frenchFmt = createCalDateFormat('fr-FR', {
+const frenchFmt = createCalDateFormatter('fr-FR', {
   weekday: 'long',
   day: 'numeric',
   month: 'long',
@@ -932,7 +932,7 @@ frenchFmt.format('2025-03-15'); // => "samedi 15 mars 2025"
 Formats a date range as a localised string.
 
 ```ts
-const fmt = createCalDateFormat('en-GB', { month: 'short', year: 'numeric' });
+const fmt = createCalDateFormatter('en-GB', { month: 'short', year: 'numeric' });
 fmt.formatRange('2025-03-01', '2025-05-31'); // => "Mar–May 2025"
 ```
 
@@ -941,7 +941,7 @@ fmt.formatRange('2025-03-01', '2025-05-31'); // => "Mar–May 2025"
 Returns the formatted date broken into typed parts, useful for custom rendering.
 
 ```ts
-const fmt = createCalDateFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const fmt = createCalDateFormatter('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 fmt.formatToParts('2025-03-15');
 // => [
 //   { type: "day", value: "15" },
@@ -957,7 +957,7 @@ Returns a formatted date range broken into typed parts.
 
 ---
 
-### `CalDateFormatOptions`
+### `CalDateFormatterOptions`
 
 A strict subset of `Intl.DateTimeFormatOptions` with all time-related fields removed. Prevents accidentally requesting time components that would be meaningless for calendar dates.
 
@@ -998,7 +998,7 @@ Without this approach, a user in UTC-5 formatting `"2025-03-15"` could receive `
 
 **`timeZone` in options**
 
-`timeZone` is stripped from `CalDateFormatOptions` and must not be passed through to the underlying `Intl.DateTimeFormat` constructor. Always override with `"UTC"` internally. Allowing the user to set `timeZone` would silently undermine the entire timezone-safety guarantee.
+`timeZone` is stripped from `CalDateFormatterOptions` and must not be passed through to the underlying `Intl.DateTimeFormat` constructor. Always override with `"UTC"` internally. Allowing the user to set `timeZone` would silently undermine the entire timezone-safety guarantee.
 
 **Runtime `Intl` dependency**
 

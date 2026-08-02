@@ -7,7 +7,7 @@
 ## Planned content for this page
 
 - A short framing paragraph: why string-based calendar dates are a good fit for chart data (no timezone bugs when categories cross midnight, easy to generate with `eachDay`/`eachMonth`, trivial to sort/compare)
-- A minimal working example: generating a month of category labels with `eachDay`, formatting them with `createCalDateFormat` or `format`, and feeding them into a Highcharts series
+- A minimal working example: generating a month of category labels with `eachDay`, formatting them with `createCalDateFormatter` or `format`, and feeding them into a Highcharts series
 - A second example showing month-grouped data using `YearMonth` + `eachMonth`, likely a common reporting/dashboard use case
 - Embedded CodePen(s) once built — see `docs/examples/README.md` (to be created) for the index of all live examples
 - A short note on what Highcharts version is required (v12+) and a link to the relevant Highcharts changelog/docs entry for string-date category axis support

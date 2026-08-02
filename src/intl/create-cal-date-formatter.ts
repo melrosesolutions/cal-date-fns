@@ -1,7 +1,7 @@
 import type { AnyDateInput } from '../types/any-date-input.type';
 import type { CalDateObj } from '../types/cal-date.type';
-import type { CalDateFormat } from './cal-date-format.type';
-import type { CalDateFormatOptions } from './cal-date-format-options.type';
+import type { CalDateFormatter } from './cal-date-formatter.type';
+import type { CalDateFormatterOptions } from './cal-date-formatter-options.type';
 import { CalDateOptionsError } from '../errors/cal-date-options-error';
 import { toObject } from '../parse/to-object';
 import { isCalDateObj } from '../internal/normalize-input';
@@ -20,7 +20,7 @@ const INVALID_OPTION_KEYS = [
 
 type InvalidOptionKey = (typeof INVALID_OPTION_KEYS)[number];
 
-function validateOptions(options?: CalDateFormatOptions): Intl.DateTimeFormatOptions {
+function validateOptions(options?: CalDateFormatterOptions): Intl.DateTimeFormatOptions {
   if (!options) {
     return { timeZone: 'UTC' };
   }
@@ -29,7 +29,7 @@ function validateOptions(options?: CalDateFormatOptions): Intl.DateTimeFormatOpt
 
   if (invalidKeys.length > 0) {
     throw new CalDateOptionsError(
-      `createCalDateFormat: unsupported option(s): ${invalidKeys.join(', ')}`,
+      `createCalDateFormatter: unsupported option(s): ${invalidKeys.join(', ')}`,
     );
   }
 
@@ -42,7 +42,10 @@ function toUtcDate(input: AnyDateInput): Date {
   return new Date(Date.UTC(dateInput.y, dateInput.m - 1, dateInput.d));
 }
 
-export function createCalDateFormat(locale: string, options?: CalDateFormatOptions): CalDateFormat {
+export function createCalDateFormatter(
+  locale: string,
+  options?: CalDateFormatterOptions,
+): CalDateFormatter {
   const intlOptions = validateOptions(options);
   const formatter = new Intl.DateTimeFormat(locale, intlOptions);
 

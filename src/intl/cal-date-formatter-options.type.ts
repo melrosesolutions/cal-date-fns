@@ -1,4 +1,4 @@
-export interface CalDateFormatOptions {
+export interface CalDateFormatterOptions {
   dateStyle?: Intl.DateTimeFormatOptions['dateStyle'];
   year?: Intl.DateTimeFormatOptions['year'];
   month?: Intl.DateTimeFormatOptions['month'];

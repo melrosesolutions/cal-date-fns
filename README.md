@@ -79,6 +79,10 @@ isAfter('2025-06-01', '2025-03-15'); // => true
 
 // Formatting
 format('2025-03-15', 'DD/MM/YYYY'); // => "15/03/2025"
+format('2025-03-15', 'YYYYMMDD'); // => "20250315"
+format('2025-03-15', 'D.M.YYYY'); // => "15.3.2025"
+format('2025-03-15', 'This is day D, of month M, in the year YYYY');
+// => "This is day 15, of month 3, in the year 2025"
 ```
 
 ## Object Input

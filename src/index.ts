@@ -40,6 +40,9 @@ export type { CalMonthFormatter } from './intl/cal-month-formatter.type';
 export { createDayFormatter } from './intl/create-day-formatter';
 export type { CalDayFormatter } from './intl/cal-day-formatter.type';
 
+// ---- Formatting ----
+export { format } from './format/format';
+
 // ---- Parsing & Validation ----
 export { isCalDate } from './parse/is-cal-date';
 export { isValid } from './parse/is-valid';

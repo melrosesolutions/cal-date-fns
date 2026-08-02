@@ -9,7 +9,7 @@
 - [Types](#types)
 - [Error Classes](#error-classes)
 - [Parsing & Validation](#parsing--validation) 🟡
-- [Formatting](#formatting) 🟡
+- [Formatting](#formatting) 🟢
 - [Arithmetic](#arithmetic) 🟢
 - [Differences](#differences) 🟢
 - [Comparison](#comparison) 🟡
@@ -186,7 +186,7 @@ toYearMonth({ y: 2025, m: 3, d: 15 }); // => "2025-03"
 
 ---
 
-## Formatting 🟡
+## Formatting 🟢
 
 ### `format(input: AnyDateInput, formatStr: string): string`
 
@@ -196,6 +196,11 @@ Formats a date or month using a token-based numeric format string.
 format('2025-03-15', 'DD/MM/YYYY'); // => "15/03/2025"
 format('2025-03-15', 'YYYY-MM-DD'); // => "2025-03-15"
 format('2025-03', 'MM/YYYY'); // => "03/2025"
+format('2025-03-15', 'YYYYMMDD'); // => "20250315"
+format('2025-03-15', 'D.M.YYYY'); // => "15.3.2025"
+format('2025-03-15', 'This is day D, of month M, in the year YYYY');
+// => "This is day 15, of month 3, in the year 2025"
+format({ y: 2025, m: 3 }, 'DD.MM.YYYY'); // => "01.03.2025"
 ```
 
 **Supported tokens:**

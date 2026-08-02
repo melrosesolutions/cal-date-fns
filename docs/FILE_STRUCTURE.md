@@ -1,6 +1,6 @@
 # cal-date-fns — Source File Structure (Revised)
 
-> **Status: Foundation + partial `parse/`, `arithmetic/`, and `difference/` implemented.** `types/`, `errors/`, `internal/`, `epoch/` are complete. `parse/` has `toObject`, `isValid`, `isCalDate`, `isYearMonth`, `toCalDate`, `toYearMonth` implemented — `parse.ts` itself (the format-string parser) is still pending, deliberately left for later. `arithmetic/` currently includes `add` and `subtract`, and `difference/` currently includes `since` and `until`.
+> **Status: Foundation + partial `parse/`, `format/`, `arithmetic/`, and `difference/` implemented.** `types/`, `errors/`, `internal/`, `epoch/` are complete. `parse/` has `toObject`, `isValid`, `isCalDate`, `isYearMonth`, `toCalDate`, `toYearMonth` implemented — `parse.ts` itself (the format-string parser) is still pending, deliberately left for later. `format/` now includes `format()` and its tests. `arithmetic/` currently includes `add` and `subtract`, and `difference/` currently includes `since` and `until`.
 
 One function per file, kebab-case filenames. **No per-folder barrel files** — only a single `src/index.ts` at the root, which does explicit named re-exports from every individual file. This avoids `export *` tree-shaking ambiguity entirely and keeps the full public surface visible in one place.
 
@@ -224,7 +224,7 @@ src/
 > For this project, once the core foundation is in place, a more practical priority order is:
 >
 > - `intl/`
-> - `format/`, `distance/`
+> - `format/`
 > - `conversion/`
 > - `parse/parse.ts`
 > - `comparison/`, `day-of-week/`, `getters/`, `setters/`, `boundaries/`, `current/`, `is-same/`, `range/`, `predicates/`
